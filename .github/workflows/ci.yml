@@ -1,0 +1,39 @@
+name: Go
+on:
+  push:
+    branches:
+      - main
+      - release-*
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
+      - "scripts/cleanup/**"
+  pull_request:
+    branches:
+      - main
+      - release-*
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
+      - "scripts/cleanup/**"
+env:
+  CI_WAIT_FOR_OK_SECONDS: 60
+  CI_MAX_ITERATIONS_THRESHOLD: 60
+  CI_CLIENT_CONCURRENT_CONNECTIONS: 1
+  CI_MAX_WAIT_FOR_POD_TIME_SECONDS: 60
+  CI_MIN_SUCCESS_THRESHOLD: 1
+  OSM_HUMAN_DEBUG_LOG: true
+
+jobs:
+  build:
+    name: Go build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup Go 1.16
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.16
+      - name: Go Build
+        run: make build
